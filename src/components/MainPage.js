@@ -22,7 +22,7 @@ const MainPage = () => {
     //컴포넌트가 바뀔때마다 가상 돔을 사용해서 그려주는데 새로 그려줌
     axios
       // 상품db정보
-      .get("https://3d1fe4a0-6c49-43a8-af25-27f9c7914ec2.mock.pstmn.io/products")
+      .get("https://61c6c5ac-6f9e-4b8f-bca8-616d6a70d2a2.mock.pstmn.io/products")
       .then((res) => {
         products = res.data.products; //products에 내용저장 //기존의 값을 버리고 상태값이 바뀜
         setProducts(products); //통신완료를 하면 값을 바꿔
@@ -33,9 +33,6 @@ const MainPage = () => {
   }, []);
   return (
     <>
-      <div id="header">
-        <img src="images/icons/logo.png" alt="logo" />
-      </div>
       <div id="body">
         <div id="banner">
           <img src="images/banners/banner1.png" alt="banner" />
@@ -43,15 +40,18 @@ const MainPage = () => {
         <h2>Products</h2>
         <div id="product-list">
           {products.map((product, idx) => {
+              console.log('map에서 반환된 product:',product,idx)
             {
               /* 원소들을 배열하는 함수: map 각각 배열요소들의 키가 필요하다. 
             고유의 요소에 키를 붙여라 최상의요소에 붙여줌*/
+            //맵이라는 함수에서 리턴값으로 반환된다. 자동으로 카운팅된거임.
+            //데이터베이스에 입력된 식별번호가 아니라는 뜻.
             }
             // console.log(products, product, idx);
             return (
               <div className="product-card" key={idx}>
                 {/* 중복되지않는 값을 키로 사용해야한다 */}
-                <Link className="product-link" to={`/product/${idx}`}>
+                <Link className="product-link" to={`/product/${product.id}`}>
                   {/* 썸네일 이미지 */}
                   <div>
                     <img className="product-img" src={product.imageUrl} alt="{product.name}" />
@@ -71,12 +71,6 @@ const MainPage = () => {
           })}
         </div>
       </div>
-      <div id="footer">
-        <Link to={"/about"}>회사소개</Link>
-        <Link to={"/policy"}>이용약관</Link>
-        <Link to={"/sales"}>통신판매업:123-1234</Link>
-        <Link to={"/license"}>사업자등록번호:456-56-78951</Link>
-      </div>{" "}
     </>
   );
 };
