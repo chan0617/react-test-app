@@ -14,7 +14,8 @@
     width: 1024px;
     height: 100%;
     display: flex;
-    align-items: center
+    align-items: center;
+    justify-content: space-between;
 }
 
 #header-area>img {
@@ -22,15 +23,13 @@
 }
 
 #footer {
+    width: 100%;
     height: 200px;
     background: #e4e4e4;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    margin-top: 3rem;
 }
 
 #footer>a {
