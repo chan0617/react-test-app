@@ -1,3 +1,4 @@
+import { API_URL } from "../config/constants";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./MainPage.css";
@@ -24,7 +25,7 @@ const MainPage = () => {
     //컴포넌트가 바뀔때마다 가상 돔을 사용해서 그려주는데 새로 그려줌
     axios
       // 상품db정보
-      .get("http://localhost:8080/products")
+      .get(`${API_URL}/products/`)
       .then((res) => {
         products = res.data.product; //products에 내용저장 //기존의 값을 버리고 상태값이 바뀜
         setProducts(products); //통신완료를 하면 값을 바꿔
