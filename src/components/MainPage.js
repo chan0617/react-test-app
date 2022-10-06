@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./MainPage.css";
 import axios from "axios";
-import { useEffect } from "react";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime); //확장해서 사용하겠다는뜻
 
 const MainPage = () => {
   //let product1=React.useState();//초기값,콜백함수(변경된초기값)
@@ -22,15 +24,18 @@ const MainPage = () => {
     //컴포넌트가 바뀔때마다 가상 돔을 사용해서 그려주는데 새로 그려줌
     axios
       // 상품db정보
-      .get("https://61c6c5ac-6f9e-4b8f-bca8-616d6a70d2a2.mock.pstmn.io/products")
+      .get("http://localhost:8080/products")
       .then((res) => {
-        products = res.data.products; //products에 내용저장 //기존의 값을 버리고 상태값이 바뀜
+        products = res.data.product; //products에 내용저장 //기존의 값을 버리고 상태값이 바뀜
         setProducts(products); //통신완료를 하면 값을 바꿔
       })
       .catch((err) => {
         return console.log(err);
       });
   }, []);
+  if (products === undefined) {
+    return <h1>상품정보를 받고있습니다.</h1>;
+  }
   return (
     <>
       <div id="body">
@@ -40,12 +45,12 @@ const MainPage = () => {
         <h2>Products</h2>
         <div id="product-list">
           {products.map((product, idx) => {
-              console.log('map에서 반환된 product:',product,idx)
+            // console.log("map에서 반환된 product:", product, idx);
             {
               /* 원소들을 배열하는 함수: map 각각 배열요소들의 키가 필요하다. 
             고유의 요소에 키를 붙여라 최상의요소에 붙여줌*/
-            //맵이라는 함수에서 리턴값으로 반환된다. 자동으로 카운팅된거임.
-            //데이터베이스에 입력된 식별번호가 아니라는 뜻.
+              //맵이라는 함수에서 리턴값으로 반환된다. 자동으로 카운팅된거임.
+              //데이터베이스에 입력된 식별번호가 아니라는 뜻.
             }
             // console.log(products, product, idx);
             return (
@@ -54,18 +59,32 @@ const MainPage = () => {
                 <Link className="product-link" to={`/product/${product.id}`}>
                   {/* 썸네일 이미지 */}
                   <div>
-                    <img className="product-img" src={product.imageUrl} alt="{product.name}" />
+                    <img
+                      className="product-img"
+                      src={product.imageUrl}
+                      alt="{product.name}"
+                    />
                   </div>
                   {/* 상품정보내역 */}
-                    <div className="product-content">
-                      <span className="product-name">{product.name}</span>
-                      <span className="product-price">{product.price}원</span>
+                  <div className="product-content">
+                    <span className="product-name">{product.name}</span>
+                    <span className="product-price">{product.price}원</span>
+                    <div className="product-footer">
                       <div className="product-seller">
-                        <img className="product-avatar" src="images/icons/avatar.png" alt="" />
+                        <img
+                          className="product-avatar"
+                          src="images/icons/avatar.png"
+                          alt=""
+                        />
                         <span>내츄럴코어</span>
                       </div>
+                      <span className="product-date">
+                        {dayjs(product.createdAt).fromNow()}
+                      </span>
+                      {/* dayjs(대상).fromNow */}
                     </div>
-                    </Link>
+                  </div>
+                </Link>
               </div>
             );
           })}

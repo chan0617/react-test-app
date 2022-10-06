@@ -11,11 +11,12 @@ const ProductPage = () => {
   useEffect(() => {
     axios
       // 상품db정보
-      .get(`https://61c6c5ac-6f9e-4b8f-bca8-616d6a70d2a2.mock.pstmn.io/products/${id}`)
+      .get(`http://localhost:8080/products/${id}`)
       .then((res) => {
         //console.log(res)
-        product = res.data;
+        product = res.data.product;
         setProduct(product);
+        console.log(res);
       })
       .catch((err) => {
         return console.log(err);
