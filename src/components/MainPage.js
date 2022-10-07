@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./MainPage.css";
 import axios from "axios";
+import { Carousel } from "antd";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime); //확장해서 사용하겠다는뜻
@@ -12,6 +13,7 @@ const MainPage = () => {
   //let product1=product1[0];//초기값
   //let setProducts=product1[1];//변경된초기값
   let [products, setProducts] = React.useState([]); //컴포넌트의 상태를 바꿀 수 있는 함수:useState
+  let [banners, setBanners] = React.useState([]); //컴포넌트의 상태를 바꿀 수 있는 함수:useState
   //let arr=[];
   //[]빈배열에서부터 시작하겠다는 뜻. 빈 값을 저장
   //products를 setProducts 바꿔주는 역활.
@@ -23,12 +25,25 @@ const MainPage = () => {
     // useEffect(axios()=>{})//axios가 계속반복되서 한번만 실행되라고 함
     //useEffect 마지막에 [] 이 부분은 없데이트 할게없다고 생각해서 한번만 실행됨 []값이 들어가면 업데이트 된게 있다고 생각함 F5를 계속 한다고 생각하면됨
     //컴포넌트가 바뀔때마다 가상 돔을 사용해서 그려주는데 새로 그려줌
+
+    /*products 통신*/
     axios
       // 상품db정보
       .get(`${API_URL}/products/`)
       .then((res) => {
         products = res.data.product; //products에 내용저장 //기존의 값을 버리고 상태값이 바뀜
         setProducts(products); //통신완료를 하면 값을 바꿔
+      })
+      .catch((err) => {
+        return console.log(err);
+      });
+
+    /*banners 통신*/
+    axios
+      .get(`${API_URL}/banners`)
+      .then((res) => {
+        banners = res.data.banners;
+        setBanners(banners);
       })
       .catch((err) => {
         return console.log(err);
@@ -40,9 +55,17 @@ const MainPage = () => {
   return (
     <>
       <div id="body">
-        <div id="banner">
-          <img src="images/banners/banner1.png" alt="banner" />
-        </div>
+        <Carousel autoplay autoplaySpeed={800}>
+          {banners.map((banner,index)=>{
+            return(
+              <Link to={banner.href} key={index}>
+                <div id="banner">
+                  <img src={`${API_URL}/${banner.imageUrl}`}/>
+                </div>
+              </Link>
+            )
+          })}
+        </Carousel>
         <h2>Products</h2>
         <div id="product-list">
           {products.map((product, idx) => {
@@ -60,11 +83,7 @@ const MainPage = () => {
                 <Link className="product-link" to={`/product/${product.id}`}>
                   {/* 썸네일 이미지 */}
                   <div>
-                    <img
-                      className="product-img"
-                      src={product.imageUrl}
-                      alt="{product.name}"
-                    />
+                    <img className="product-img" src={`${API_URL}/${product.imageUrl}`} alt={`${API_URL}/${product.name}`} />
                   </div>
                   {/* 상품정보내역 */}
                   <div className="product-content">
@@ -72,15 +91,13 @@ const MainPage = () => {
                     <span className="product-price">{product.price}원</span>
                     <div className="product-footer">
                       <div className="product-seller">
-                        <img
-                          className="product-avatar"
-                          src="images/icons/avatar.png"
-                          alt=""
-                        />
-                        <span>내츄럴코어</span>
+                        <img className="product-avatar" src={`${API_URL}/${product.imageUrl}`} alt={`${API_URL}/${product.name}`} />
+                        {/* {product.seller} */}
+                        <span>{product.name}</span>
                       </div>
                       <span className="product-date">
-                        {dayjs(product.createdAt).fromNow()}
+                        {`${dayjs(product.createdAt).fromNow()}`}
+                        {/* {dayjs(product.createdAt).fromNow()} */}
                       </span>
                       {/* dayjs(대상).fromNow */}
                     </div>

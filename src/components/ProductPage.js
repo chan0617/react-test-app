@@ -32,17 +32,17 @@ const ProductPage = () => {
     <>
       <button onClick={() => navi(-1)}>이전화면</button>
       <div id="image-box">
-        <img src={`/${product.imageUrl}`} alt={product.name} />
+        <img src={`${API_URL}/${product.imageUrl}`} alt={product.name} />
       </div>
       <div id="profile-box">
-        <img src="/images/icons/avatar.png" alt={product.seller} />
+        <img src={`${API_URL}/${product.imageUrl}`} alt={product.seller} />
         <span className="product-seller">{product.seller}</span>
       </div>
       <div id="content-box">
         <div id="name">{product.name}</div>
         <div id="price">{product.price}원</div>
-        <div id="createat"></div>
-        <div id="desc"></div>
+        <div id="createat">{product.createdAt}</div>   
+        <div id="desc">{product.description}</div>
       </div>
     </>
   );
